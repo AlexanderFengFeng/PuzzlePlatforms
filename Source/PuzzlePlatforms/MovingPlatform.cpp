@@ -12,29 +12,39 @@ AMovingPlatform::AMovingPlatform()
 void AMovingPlatform::BeginPlay()
 {
     Super::BeginPlay();
+
+    // Set up direction vectors and values.
     OriginalLocation = GetActorLocation();
+    GlobalTargetLocation = GetTransform().TransformPosition(TargetLocation);
+    DirectionVector = (GlobalTargetLocation - OriginalLocation).GetSafeNormal();
+    BoundingDistance = FVector::Dist(GlobalTargetLocation, OriginalLocation);
+
+    if (HasAuthority())
+    {
+        SetReplicates(true);
+        SetReplicateMovement(true);
+    }
 }
 
 void AMovingPlatform::Tick(float DeltaSeconds)
 {
     Super::Tick(DeltaSeconds);
+    if (HasAuthority())
+    {
+        Move(DeltaSeconds);
+    }
+}
+
+void AMovingPlatform::Move(float DeltaSeconds)
+{
     FVector Location = GetActorLocation();
+    int Direction = bMovingForward ? 1 : -1;
+    Location += DirectionVector * DeltaSeconds * PlatformVelocity * Direction;
 
-    if (bMovingForward)
+    FVector CurrentOrigin = bMovingForward ? OriginalLocation : GlobalTargetLocation;
+    if (FVector::Dist(CurrentOrigin, GetActorLocation()) >= BoundingDistance)
     {
-        Location += PlatformVelocity * DeltaSeconds;
-    }
-    else
-    {
-        Location -= PlatformVelocity * DeltaSeconds;
-    }
-
-    TimeElapsedSinceLastChange += DeltaSeconds;
-    if (TimeElapsedSinceLastChange >= DurationToChangeDirection)
-    {
-        TimeElapsedSinceLastChange = 0.f;
         bMovingForward = !bMovingForward;
-
     }
     SetActorLocation(Location);
 }

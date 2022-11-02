@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "Engine/StaticMeshActor.h"
-#include "GameFramework/Actor.h"
 #include "MovingPlatform.generated.h"
 
 /**
@@ -19,14 +18,23 @@ public:
 	AMovingPlatform();
 
 protected:
-	void Tick(float DeltaSeconds) override;
-	void BeginPlay() override;
+	virtual void Tick(float DeltaSeconds) override;
+	virtual void BeginPlay() override;
 
 private:
 	FVector OriginalLocation;
 	bool bMovingForward = true;
-	FVector PlatformVelocity = FVector(100.f, 0.f, 0.f);
+	UPROPERTY(EditAnywhere)
+	float PlatformVelocity = 100.f;
+	UPROPERTY(EditInstanceOnly, Meta = (MakeEditWidget = true))
+	FVector TargetLocation;
+	FVector DirectionVector;
+	FVector GlobalTargetLocation;
+	float BoundingDistance;
 
-	float TimeElapsedSinceLastChange = 0.f;
-	const float DurationToChangeDirection = 5.f;
+	//float TimeElapsedSinceLastChange = 0.f;
+	//const float DurationToChangeDirection = 5.f;
+
+	void Move(float DeltaSeconds);
 };
+
