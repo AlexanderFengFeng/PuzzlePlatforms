@@ -45,9 +45,11 @@ void AMovingPlatform::Move(float DeltaSeconds)
     Location += DirectionVector * DeltaSeconds * PlatformVelocity * Direction;
 
     FVector CurrentOrigin = bMovingForward ? OriginalLocation : GlobalTargetLocation;
-    if (FVector::Dist(CurrentOrigin, GetActorLocation()) >= BoundingDistance)
+    FVector CurrentDestination = bMovingForward ? GlobalTargetLocation : OriginalLocation;
+    if (FVector::Dist(CurrentOrigin, Location) >= BoundingDistance)
     {
         bMovingForward = !bMovingForward;
+        Location = CurrentDestination;
     }
     SetActorLocation(Location);
 }
