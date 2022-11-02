@@ -32,9 +32,7 @@ private:
 	FVector GlobalTargetLocation;
 	float BoundingDistance;
 
-	//float TimeElapsedSinceLastChange = 0.f;
-	//const float DurationToChangeDirection = 5.f;
-
+    void SetUpPositionVectors();
 	void Move(float DeltaSeconds);
 };
 

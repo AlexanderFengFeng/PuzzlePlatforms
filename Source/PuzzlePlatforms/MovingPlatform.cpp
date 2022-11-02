@@ -12,18 +12,21 @@ AMovingPlatform::AMovingPlatform()
 void AMovingPlatform::BeginPlay()
 {
     Super::BeginPlay();
-
-    // Set up direction vectors and values.
-    OriginalLocation = GetActorLocation();
-    GlobalTargetLocation = GetTransform().TransformPosition(TargetLocation);
-    DirectionVector = (GlobalTargetLocation - OriginalLocation).GetSafeNormal();
-    BoundingDistance = FVector::Dist(GlobalTargetLocation, OriginalLocation);
-
+    SetUpPositionVectors();
     if (HasAuthority())
     {
         SetReplicates(true);
         SetReplicateMovement(true);
     }
+}
+
+void AMovingPlatform::SetUpPositionVectors()
+{
+    // Set up direction vectors and values.
+    OriginalLocation = GetActorLocation();
+    GlobalTargetLocation = GetTransform().TransformPosition(TargetLocation);
+    DirectionVector = (GlobalTargetLocation - OriginalLocation).GetSafeNormal();
+    BoundingDistance = FVector::Dist(GlobalTargetLocation, OriginalLocation);
 }
 
 void AMovingPlatform::Tick(float DeltaSeconds)
