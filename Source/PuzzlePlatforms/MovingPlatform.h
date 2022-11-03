@@ -16,10 +16,10 @@ class PUZZLEPLATFORMS_API AMovingPlatform : public AStaticMeshActor
 
 public:
 	AMovingPlatform();
+	virtual void BeginPlay() override;
 
 protected:
 	virtual void Tick(float DeltaSeconds) override;
-	virtual void BeginPlay() override;
 
 private:
 	FVector OriginalLocation;
