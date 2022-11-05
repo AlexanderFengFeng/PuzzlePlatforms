@@ -18,6 +18,9 @@ public:
 	AMovingPlatform();
 	virtual void BeginPlay() override;
 
+	void AddActiveTrigger();
+	void RemoveActiveTrigger();
+
 protected:
 	virtual void Tick(float DeltaSeconds) override;
 
@@ -34,5 +37,9 @@ private:
 
     void SetUpPositionVectors();
 	void Move(float DeltaSeconds);
+
+	int CurrentTriggers = 0;
+	UPROPERTY(EditAnywhere)
+	int TargetTriggers = 0;
 };
 

@@ -32,7 +32,8 @@ void AMovingPlatform::SetUpPositionVectors()
 void AMovingPlatform::Tick(float DeltaSeconds)
 {
     Super::Tick(DeltaSeconds);
-    if (HasAuthority())
+
+    if (CurrentTriggers >= TargetTriggers && HasAuthority())
     {
         Move(DeltaSeconds);
     }
@@ -53,3 +54,17 @@ void AMovingPlatform::Move(float DeltaSeconds)
     }
     SetActorLocation(Location);
 }
+
+void AMovingPlatform::AddActiveTrigger()
+{
+    CurrentTriggers++;
+}
+
+void AMovingPlatform::RemoveActiveTrigger()
+{
+    if (CurrentTriggers > 0)
+    {
+        CurrentTriggers--;
+    }
+}
+

@@ -3,6 +3,7 @@
 
 #include "PlatformTrigger.h"
 #include "Components/BoxComponent.h"
+#include "MovingPlatform.h"
 
 
 // Sets default values
@@ -42,7 +43,10 @@ void APlatformTrigger::BeginOverlap(UPrimitiveComponent* OverlappedComponent,
 									bool bFromSweep,
 									const FHitResult& SweepResult)
 {
-	UE_LOG(LogTemp, Warning, TEXT("BEGIN OVERLAP"));
+	for (AMovingPlatform* MovingPlatform : MovingPlatforms)
+	{
+		MovingPlatform->AddActiveTrigger();
+	}
 }
 
 void APlatformTrigger::EndOverlap(UPrimitiveComponent* OverlappedComp,
@@ -50,5 +54,8 @@ void APlatformTrigger::EndOverlap(UPrimitiveComponent* OverlappedComp,
 								  UPrimitiveComponent* OtherComp,
 								  int32 OtherBodyIndex)
 {
-	UE_LOG(LogTemp, Warning, TEXT("END OVERLAP"));
+	for (AMovingPlatform* MovingPlatform : MovingPlatforms)
+	{
+		MovingPlatform->RemoveActiveTrigger();
+	}
 }
