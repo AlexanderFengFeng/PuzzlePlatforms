@@ -2,19 +2,36 @@
 
 
 #include "PuzzlePlatformsGameInstance.h"
+#include "Blueprint/UserWidget.h"
 #include "Engine/Engine.h"
+#include "UObject/ConstructorHelpers.h"
 
 // Occurs on beginning of game as well as in the editor after compilation.
 UPuzzlePlatformsGameInstance::UPuzzlePlatformsGameInstance(const FObjectInitializer& ObjectInitializer)
 {
-    UE_LOG(LogTemp, Warning, TEXT("CONSTRUCTION"));
+    ConstructorHelpers::FClassFinder<UUserWidget> MenuBPClass(TEXT("/Game/UI/WBP_MainMenu"));
+    if (MenuBPClass.Class != nullptr)
+    {
+        MenuClass = MenuBPClass.Class;
+    }
 }
 
 // Only occurs on beginning of game.
 void UPuzzlePlatformsGameInstance::Init()
 {
     Super::Init();
-    UE_LOG(LogTemp, Warning, TEXT("INIT"));
+}
+
+void UPuzzlePlatformsGameInstance::LoadMenu()
+{
+    if (MenuClass != nullptr)
+    {
+        UUserWidget* Menu = CreateWidget<UUserWidget>(this, MenuClass);
+        if (Menu != nullptr)
+        {
+            Menu->AddToViewport();
+        }
+    }
 }
 
 void UPuzzlePlatformsGameInstance::Host()
