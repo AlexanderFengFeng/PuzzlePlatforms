@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "MenuInterface.h"
 #include "MainMenu.generated.h"
 
 class UButton;
@@ -30,4 +31,10 @@ private:
     void Host();
     UFUNCTION()
     void Join();
+
+    // To be filled in later to point to the specific menu interface.
+    IMenuInterface* MenuInterface;
+
+public:
+    void SetMenuInterface(IMenuInterface* MenuInterface);
 };

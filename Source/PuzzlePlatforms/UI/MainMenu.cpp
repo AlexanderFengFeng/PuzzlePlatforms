@@ -24,13 +24,19 @@ bool UMainMenu::Initialize()
     return true;
 }
 
-void UMainMenu::Host()
+void UMainMenu::SetMenuInterface(IMenuInterface* InMenuInterface)
 {
-    UE_LOG(LogTemp, Warning, TEXT("HOSTING"));
+    MenuInterface = InMenuInterface;
 }
 
+void UMainMenu::Host()
+{
+    if (MenuInterface == nullptr) return;
+    MenuInterface->Host();
+}
 
 void UMainMenu::Join()
 {
-    UE_LOG(LogTemp, Warning, TEXT("JOINING"));
+    if (MenuInterface == nullptr) return;
+    //MenuInterface->Join();
 }

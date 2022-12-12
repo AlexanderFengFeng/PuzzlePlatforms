@@ -2,14 +2,14 @@
 
 
 #include "PuzzlePlatformsGameInstance.h"
-#include "Blueprint/UserWidget.h"
 #include "Engine/Engine.h"
+#include "UI/MainMenu.h"
 #include "UObject/ConstructorHelpers.h"
 
 // Occurs on beginning of game as well as in the editor after compilation.
 UPuzzlePlatformsGameInstance::UPuzzlePlatformsGameInstance(const FObjectInitializer& ObjectInitializer)
 {
-    ConstructorHelpers::FClassFinder<UUserWidget> MenuBPClass(TEXT("/Game/UI/WBP_MainMenu"));
+    ConstructorHelpers::FClassFinder<UMainMenu> MenuBPClass(TEXT("/Game/UI/WBP_MainMenu"));
     if (MenuBPClass.Class != nullptr)
     {
         MenuClass = MenuBPClass.Class;
@@ -26,7 +26,7 @@ void UPuzzlePlatformsGameInstance::LoadMenu()
 {
     if (MenuClass == nullptr) return;
 
-    UUserWidget* Menu = CreateWidget<UUserWidget>(this, MenuClass);
+    UMainMenu* Menu = CreateWidget<UMainMenu>(this, MenuClass);
     if (Menu == nullptr) return;
 
     Menu->AddToViewport();
@@ -38,6 +38,8 @@ void UPuzzlePlatformsGameInstance::LoadMenu()
     InputModeData.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock);
     PlayerController->SetInputMode(InputModeData);
     PlayerController->bShowMouseCursor = true;
+
+    Menu->SetMenuInterface(this);
 }
 
 void UPuzzlePlatformsGameInstance::Host()
