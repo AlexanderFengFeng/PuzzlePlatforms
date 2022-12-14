@@ -40,3 +40,19 @@ void UMainMenu::Join()
     if (MenuInterface == nullptr) return;
     //MenuInterface->Join();
 }
+
+void UMainMenu::Setup()
+{
+    this->AddToViewport();
+    UWorld* World = GetWorld();
+    if (World == nullptr) return;
+
+    APlayerController* PlayerController = World->GetFirstPlayerController();
+    if (PlayerController == nullptr) return;
+
+    FInputModeUIOnly InputModeData;
+    InputModeData.SetWidgetToFocus(this->TakeWidget());
+    InputModeData.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock);
+    PlayerController->SetInputMode(InputModeData);
+    PlayerController->bShowMouseCursor = true;
+}

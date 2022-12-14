@@ -37,4 +37,6 @@ private:
 
 public:
     void SetMenuInterface(IMenuInterface* MenuInterface);
+
+    void Setup();
 };
