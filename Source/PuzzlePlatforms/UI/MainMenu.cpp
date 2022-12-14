@@ -56,3 +56,18 @@ void UMainMenu::Setup()
     PlayerController->SetInputMode(InputModeData);
     PlayerController->bShowMouseCursor = true;
 }
+
+void UMainMenu::OnLevelRemovedFromWorld(ULevel* InLevel, UWorld* InWorld)
+{
+    Super::OnLevelRemovedFromWorld(InLevel, InWorld);
+    this->RemoveFromViewport();
+
+    UWorld* World = GetWorld();
+    if (World == nullptr) return;
+    APlayerController* PlayerController = World->GetFirstPlayerController();
+    if (PlayerController == nullptr) return;
+
+    FInputModeGameOnly InputModeData;
+    PlayerController->SetInputMode(InputModeData);
+    PlayerController->bShowMouseCursor = false;
+}
