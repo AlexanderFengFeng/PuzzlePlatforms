@@ -8,6 +8,7 @@
 #include "MainMenu.generated.h"
 
 class UButton;
+class UWidget;
 
 /**
  * 
@@ -23,17 +24,39 @@ protected:
 private:
     UPROPERTY(meta = (BindWidget))
     UButton* HostButton;
+    UPROPERTY(meta = (BindWidget))
+    UButton* JoinMenuButton;
+    UPROPERTY(meta = (BindWidget))
+    UButton* ExitButton;
+    UPROPERTY(meta = (BindWidget))
+    UButton* BackToMenuButton;
+    UPROPERTY(meta = (BindWidget))
+    UButton* JoinServerButton;
 
     UPROPERTY(meta = (BindWidget))
-    UButton* JoinButton;
+    class UWidgetSwitcher* MenuSwitcher;
+
+    UPROPERTY(meta = (BindWidget))
+    UWidget* JoinMenu;
+    UPROPERTY(meta = (BindWidget))
+    UWidget* MainMenu;
 
     UFUNCTION()
-    void Host();
+    void HostServer();
     UFUNCTION()
-    void Join();
+    void OpenJoinMenu();
+    UFUNCTION()
+    void CloseGame();
+    UFUNCTION()
+    void ReturnToMenu();
+    UFUNCTION()
+    void JoinServer();
 
     // To be filled in later to point to the specific menu interface.
     IMenuInterface* MenuInterface;
+
+    APlayerController* PlayerController;
+    UWorld* World;
 
 public:
     void SetMenuInterface(IMenuInterface* MenuInterface);

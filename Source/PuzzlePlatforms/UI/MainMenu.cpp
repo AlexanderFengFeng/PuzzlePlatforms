@@ -3,19 +3,29 @@
 
 #include "MainMenu.h"
 #include "Components/Button.h"
+#include "Components/WidgetSwitcher.h"
+#include "Kismet/KismetSystemLibrary.h"
 
 
 bool UMainMenu::Initialize()
 {
     bool Success = Super::Initialize();
-    if (!Success || HostButton == nullptr || JoinButton == nullptr) {
+    World = GetWorld();
+    if (World)
+    {
+        PlayerController = World->GetFirstPlayerController();
+    }
+
+    if (!Success || HostButton == nullptr || JoinMenuButton == nullptr) {
 
         return false;
     }
     try
     {
-        HostButton->OnClicked.AddDynamic(this, &UMainMenu::Host);
-        JoinButton->OnClicked.AddDynamic(this, &UMainMenu::Join);
+        HostButton->OnClicked.AddDynamic(this, &UMainMenu::HostServer);
+        JoinMenuButton->OnClicked.AddDynamic(this, &UMainMenu::OpenJoinMenu);
+        ExitButton->OnClicked.AddDynamic(this, &UMainMenu::CloseGame);
+        BackToMenuButton->OnClicked.AddDynamic(this, &UMainMenu::ReturnToMenu);
     }
     catch(...)
     {
@@ -29,27 +39,39 @@ void UMainMenu::SetMenuInterface(IMenuInterface* InMenuInterface)
     MenuInterface = InMenuInterface;
 }
 
-void UMainMenu::Host()
+void UMainMenu::HostServer()
 {
     if (MenuInterface == nullptr) return;
     MenuInterface->Host();
 }
 
-void UMainMenu::Join()
+void UMainMenu::OpenJoinMenu()
 {
-    if (MenuInterface == nullptr) return;
-    //MenuInterface->Join();
+    if (MenuInterface == nullptr || JoinMenu == nullptr) return;
+    MenuSwitcher->SetActiveWidget(JoinMenu);
 }
+
+void UMainMenu::CloseGame()
+{
+    UKismetSystemLibrary::QuitGame(this, PlayerController, EQuitPreference::Quit, false);
+}
+
+void UMainMenu::ReturnToMenu()
+{
+    if (MenuSwitcher == nullptr || MainMenu == nullptr) return;
+    MenuSwitcher->SetActiveWidget(MainMenu);
+}
+
+void UMainMenu::JoinServer()
+{
+    
+}
+
 
 void UMainMenu::Setup()
 {
     this->AddToViewport();
-    UWorld* World = GetWorld();
-    if (World == nullptr) return;
-
-    APlayerController* PlayerController = World->GetFirstPlayerController();
     if (PlayerController == nullptr) return;
-
     FInputModeUIOnly InputModeData;
     InputModeData.SetWidgetToFocus(this->TakeWidget());
     InputModeData.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock);
@@ -61,12 +83,7 @@ void UMainMenu::OnLevelRemovedFromWorld(ULevel* InLevel, UWorld* InWorld)
 {
     Super::OnLevelRemovedFromWorld(InLevel, InWorld);
     this->RemoveFromViewport();
-
-    UWorld* World = GetWorld();
-    if (World == nullptr) return;
-    APlayerController* PlayerController = World->GetFirstPlayerController();
     if (PlayerController == nullptr) return;
-
     FInputModeGameOnly InputModeData;
     PlayerController->SetInputMode(InputModeData);
     PlayerController->bShowMouseCursor = false;
