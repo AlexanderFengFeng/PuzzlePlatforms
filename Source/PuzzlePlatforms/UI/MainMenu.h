@@ -41,6 +41,9 @@ private:
     UPROPERTY(meta = (BindWidget))
     UWidget* MainMenu;
 
+    UPROPERTY(meta = (BindWidget))
+    class UEditableTextBox* IpAddressInput;
+
     UFUNCTION()
     void HostServer();
     UFUNCTION()
