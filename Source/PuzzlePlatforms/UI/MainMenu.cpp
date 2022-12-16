@@ -66,7 +66,9 @@ void UMainMenu::ReturnToMenu()
 
 void UMainMenu::JoinServer()
 {
-    
+    if (MenuInterface == nullptr || IpAddressInput == nullptr) return;
+    FString IPAddress = IpAddressInput->GetText().ToString();
+    MenuInterface->Join(IPAddress);
 }
 
 
