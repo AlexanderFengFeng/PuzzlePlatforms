@@ -49,7 +49,7 @@ private:
     UFUNCTION()
     void OpenJoinMenu();
     UFUNCTION()
-    void CloseGame();
+    void QuitGame();
     UFUNCTION()
     void ReturnToMenu();
     UFUNCTION()

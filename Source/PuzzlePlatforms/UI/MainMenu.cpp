@@ -24,7 +24,7 @@ bool UMainMenu::Initialize()
     }
     HostButton->OnClicked.AddDynamic(this, &UMainMenu::HostServer);
     JoinMenuButton->OnClicked.AddDynamic(this, &UMainMenu::OpenJoinMenu);
-    QuitGameButton->OnClicked.AddDynamic(this, &UMainMenu::CloseGame);
+    QuitGameButton->OnClicked.AddDynamic(this, &UMainMenu::QuitGame);
     BackToMainMenuButton->OnClicked.AddDynamic(this, &UMainMenu::ReturnToMenu);
     JoinServerButton->OnClicked.AddDynamic(this, &UMainMenu::JoinServer);
     return true;
@@ -47,7 +47,7 @@ void UMainMenu::OpenJoinMenu()
     MenuSwitcher->SetActiveWidget(JoinMenu);
 }
 
-void UMainMenu::CloseGame()
+void UMainMenu::QuitGame()
 {
     UKismetSystemLibrary::QuitGame(this, PlayerController, EQuitPreference::Quit, false);
 }
