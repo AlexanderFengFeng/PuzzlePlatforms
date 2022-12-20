@@ -27,7 +27,7 @@ private:
     UPROPERTY(meta = (BindWidget))
     UButton* JoinMenuButton;
     UPROPERTY(meta = (BindWidget))
-    UButton* ExitButton;
+    UButton* QuitGameButton;
     UPROPERTY(meta = (BindWidget))
     UButton* BackToMenuButton;
     UPROPERTY(meta = (BindWidget))

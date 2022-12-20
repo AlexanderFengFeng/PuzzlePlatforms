@@ -25,7 +25,7 @@ bool UMainMenu::Initialize()
     {
         HostButton->OnClicked.AddDynamic(this, &UMainMenu::HostServer);
         JoinMenuButton->OnClicked.AddDynamic(this, &UMainMenu::OpenJoinMenu);
-        ExitButton->OnClicked.AddDynamic(this, &UMainMenu::CloseGame);
+        QuitGameButton->OnClicked.AddDynamic(this, &UMainMenu::CloseGame);
         BackToMenuButton->OnClicked.AddDynamic(this, &UMainMenu::ReturnToMenu);
         JoinServerButton->OnClicked.AddDynamic(this, &UMainMenu::JoinServer);
     }
