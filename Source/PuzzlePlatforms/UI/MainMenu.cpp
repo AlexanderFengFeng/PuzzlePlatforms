@@ -17,7 +17,7 @@ bool UMainMenu::Initialize()
         PlayerController = World->GetFirstPlayerController();
     }
 
-    if (!Success || HostButton == nullptr || JoinMenuButton == nullptr) {
+    if (!Success) {
 
         return false;
     }
