@@ -17,22 +17,16 @@ bool UMainMenu::Initialize()
         PlayerController = World->GetFirstPlayerController();
     }
 
-    if (!Success) {
+    if (!Success || HostButton == nullptr || JoinMenu == nullptr || QuitGameButton == nullptr
+        || BackToMainMenuButton == nullptr || JoinServerButton == nullptr) {
 
         return false;
     }
-    try
-    {
-        HostButton->OnClicked.AddDynamic(this, &UMainMenu::HostServer);
-        JoinMenuButton->OnClicked.AddDynamic(this, &UMainMenu::OpenJoinMenu);
-        QuitGameButton->OnClicked.AddDynamic(this, &UMainMenu::CloseGame);
-        BackToMenuButton->OnClicked.AddDynamic(this, &UMainMenu::ReturnToMenu);
-        JoinServerButton->OnClicked.AddDynamic(this, &UMainMenu::JoinServer);
-    }
-    catch(...)
-    {
-        return false;
-    }
+    HostButton->OnClicked.AddDynamic(this, &UMainMenu::HostServer);
+    JoinMenuButton->OnClicked.AddDynamic(this, &UMainMenu::OpenJoinMenu);
+    QuitGameButton->OnClicked.AddDynamic(this, &UMainMenu::CloseGame);
+    BackToMainMenuButton->OnClicked.AddDynamic(this, &UMainMenu::ReturnToMenu);
+    JoinServerButton->OnClicked.AddDynamic(this, &UMainMenu::JoinServer);
     return true;
 }
 
