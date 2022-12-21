@@ -5,7 +5,6 @@
 #include "Components/Button.h"
 #include "Components/WidgetSwitcher.h"
 #include "Components/EditableTextBox.h"
-#include "Kismet/KismetSystemLibrary.h"
 
 
 bool UMainMenu::Initialize()
@@ -30,10 +29,6 @@ bool UMainMenu::Initialize()
     return true;
 }
 
-void UMainMenu::SetMenuInterface(IMenuInterface* InMenuInterface)
-{
-    MenuInterface = InMenuInterface;
-}
 
 void UMainMenu::HostServer()
 {
@@ -47,11 +42,6 @@ void UMainMenu::OpenJoinMenu()
     MenuSwitcher->SetActiveWidget(JoinMenu);
 }
 
-void UMainMenu::QuitGame()
-{
-    UKismetSystemLibrary::QuitGame(this, PlayerController, EQuitPreference::Quit, false);
-}
-
 void UMainMenu::ReturnToMenu()
 {
     if (MenuSwitcher == nullptr || MainMenu == nullptr) return;
@@ -63,26 +53,4 @@ void UMainMenu::JoinServer()
     if (MenuInterface == nullptr || IpAddressInput == nullptr) return;
     FString IPAddress = IpAddressInput->GetText().ToString();
     MenuInterface->Join(IPAddress);
-}
-
-
-void UMainMenu::Setup()
-{
-    this->AddToViewport();
-    if (PlayerController == nullptr) return;
-    FInputModeUIOnly InputModeData;
-    InputModeData.SetWidgetToFocus(this->TakeWidget());
-    InputModeData.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock);
-    PlayerController->SetInputMode(InputModeData);
-    PlayerController->bShowMouseCursor = true;
-}
-
-void UMainMenu::OnLevelRemovedFromWorld(ULevel* InLevel, UWorld* InWorld)
-{
-    Super::OnLevelRemovedFromWorld(InLevel, InWorld);
-    this->RemoveFromViewport();
-    if (PlayerController == nullptr) return;
-    FInputModeGameOnly InputModeData;
-    PlayerController->SetInputMode(InputModeData);
-    PlayerController->bShowMouseCursor = false;
 }

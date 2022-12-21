@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
-#include "MenuInterface.h"
+#include "MenuWidget.h"
 #include "MainMenu.generated.h"
 
 class UButton;
@@ -14,7 +14,7 @@ class UWidget;
  * 
  */
 UCLASS()
-class PUZZLEPLATFORMS_API UMainMenu : public UUserWidget
+class PUZZLEPLATFORMS_API UMainMenu : public UMenuWidget
 {
     GENERATED_BODY()
 
@@ -49,21 +49,7 @@ private:
     UFUNCTION()
     void OpenJoinMenu();
     UFUNCTION()
-    void QuitGame();
-    UFUNCTION()
     void ReturnToMenu();
     UFUNCTION()
     void JoinServer();
-
-    // To be filled in later to point to the specific menu interface.
-    IMenuInterface* MenuInterface;
-
-    APlayerController* PlayerController;
-    UWorld* World;
-
-public:
-    void SetMenuInterface(IMenuInterface* MenuInterface);
-
-    void Setup();
-    virtual void OnLevelRemovedFromWorld(ULevel* InLevel, UWorld* InWorld) override;
 };
