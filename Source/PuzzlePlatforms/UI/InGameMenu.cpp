@@ -19,7 +19,16 @@ bool UInGameMenu::Initialize()
         return false;
     }
     QuitGameButton->OnClicked.AddDynamic(this, &UInGameMenu::QuitGame);
-    //BackToMainMenuButton->OnClicked.AddDynamic(this, &UInGameMenu::ReturnToMenu);
-    //BackToGameButton->OnClicked.AddDynamic(this, &UInGameMenu::JoinServer);
+    BackToMainMenuButton->OnClicked.AddDynamic(this, &UInGameMenu::ReturnToMainMenu);
+    BackToGameButton->OnClicked.AddDynamic(this, &UInGameMenu::Teardown);
     return true;
+}
+
+void UInGameMenu::ReturnToMainMenu()
+{
+    if (MenuInterface != nullptr)
+    {
+        Teardown();
+        MenuInterface->LoadMainMenuLevel();
+    }
 }

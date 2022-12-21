@@ -51,6 +51,15 @@ void UPuzzlePlatformsGameInstance::InGameLoadMenu()
     InGameMenu->SetMenuInterface(this);
 }
 
+void UPuzzlePlatformsGameInstance::LoadMainMenuLevel()
+{
+    APlayerController* PlayerController = GetFirstLocalPlayerController();
+    if (PlayerController != nullptr)
+    {
+        PlayerController->ClientTravel("/Game/Maps/MainMenu", ETravelType::TRAVEL_Absolute);
+    }
+}
+
 void UPuzzlePlatformsGameInstance::Host()
 {
     UEngine* Engine = GetEngine();

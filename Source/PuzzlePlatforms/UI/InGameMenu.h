@@ -3,7 +3,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Blueprint/UserWidget.h"
 #include "MenuWidget.h"
 #include "InGameMenu.generated.h"
 
@@ -27,4 +26,7 @@ private:
     UButton* BackToMainMenuButton;
     UPROPERTY(meta = (BindWidget))
     UButton* BackToGameButton;
+
+    UFUNCTION()
+    void ReturnToMainMenu();
 };

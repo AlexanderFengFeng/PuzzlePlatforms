@@ -23,6 +23,8 @@ public:
 	UFUNCTION(Exec, BlueprintCallable)
 	void LoadMainMenu();
 
+	UFUNCTION(Exec, BlueprintCallable)
+	virtual void LoadMainMenuLevel() override;
 	UFUNCTION(Exec)
 	virtual void Host() override;
 	UFUNCTION(Exec)
