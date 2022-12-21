@@ -14,7 +14,7 @@ UPuzzlePlatformsGameInstance::UPuzzlePlatformsGameInstance(const FObjectInitiali
     ConstructorHelpers::FClassFinder<UMainMenu> MenuBPClass(TEXT("/Game/UI/WBP_MainMenu"));
     if (MenuBPClass.Class != nullptr)
     {
-        MenuClass = MenuBPClass.Class;
+        MainMenuClass = MenuBPClass.Class;
     }
     ConstructorHelpers::FClassFinder<UInGameMenu> InGameMenuBPClass(TEXT("/Game/UI/WBP_InGameMenu"));
     if (InGameMenuBPClass.Class != nullptr)
@@ -29,11 +29,11 @@ void UPuzzlePlatformsGameInstance::Init()
     Super::Init();
 }
 
-void UPuzzlePlatformsGameInstance::LoadMenu()
+void UPuzzlePlatformsGameInstance::LoadMainMenu()
 {
-    if (MenuClass == nullptr) return;
+    if (MainMenuClass == nullptr) return;
 
-    UMainMenu* Menu = CreateWidget<UMainMenu>(this, MenuClass);
+    UMainMenu* Menu = CreateWidget<UMainMenu>(this, MainMenuClass);
     if (Menu == nullptr) return;
 
     Menu->Setup();

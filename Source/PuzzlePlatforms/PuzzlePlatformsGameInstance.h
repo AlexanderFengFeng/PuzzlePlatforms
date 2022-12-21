@@ -19,19 +19,18 @@ public:
 	UPuzzlePlatformsGameInstance(const FObjectInitializer& ObjectInitializer);
 
 	UFUNCTION(Exec, BlueprintCallable)
-	void LoadMenu();
-	UFUNCTION(Exec, BlueprintCallable)
 	void InGameLoadMenu();
+	UFUNCTION(Exec, BlueprintCallable)
+	void LoadMainMenu();
 
 	UFUNCTION(Exec)
-	void Host();
-
+	virtual void Host() override;
 	UFUNCTION(Exec)
-	void Join(const FString& Address);
+	virtual void Join(const FString& Address) override;
 
 private:
 	virtual void Init() override;
 
-	TSubclassOf<class UUserWidget> MenuClass;
-	TSubclassOf<class UUserWidget> InGameMenuClass;
+	TSubclassOf<UUserWidget> MainMenuClass;
+	TSubclassOf<UUserWidget> InGameMenuClass;
 };
