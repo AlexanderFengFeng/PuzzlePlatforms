@@ -20,11 +20,7 @@ void UMenuWidget::Setup()
 void UMenuWidget::OnLevelRemovedFromWorld(ULevel* InLevel, UWorld* InWorld)
 {
     Super::OnLevelRemovedFromWorld(InLevel, InWorld);
-    this->RemoveFromViewport();
-    if (PlayerController == nullptr) return;
-    FInputModeGameOnly InputModeData;
-    PlayerController->SetInputMode(InputModeData);
-    PlayerController->bShowMouseCursor = false;
+    Teardown();
 }
 
 void UMenuWidget::SetMenuInterface(IMenuInterface* InMenuInterface)
@@ -35,4 +31,13 @@ void UMenuWidget::SetMenuInterface(IMenuInterface* InMenuInterface)
 void UMenuWidget::QuitGame()
 {
     UKismetSystemLibrary::QuitGame(this, PlayerController, EQuitPreference::Quit, false);
+}
+
+void UMenuWidget::Teardown()
+{
+    this->RemoveFromViewport();
+    if (PlayerController == nullptr) return;
+    FInputModeGameOnly InputModeData;
+    PlayerController->SetInputMode(InputModeData);
+    PlayerController->bShowMouseCursor = false;
 }

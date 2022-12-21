@@ -18,6 +18,8 @@ class PUZZLEPLATFORMS_API UMenuWidget : public UUserWidget
 protected:
     UFUNCTION()
     void QuitGame();
+    UFUNCTION()
+    void Teardown();
 
     IMenuInterface* MenuInterface;
 
