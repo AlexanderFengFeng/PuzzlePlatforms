@@ -4,6 +4,8 @@
 #include "PuzzlePlatformsGameInstance.h"
 #include "Engine/Engine.h"
 #include "UI/MainMenu.h"
+#include "UI/InGameMenu.h"
+#include "UI/MenuWidget.h"
 #include "UObject/ConstructorHelpers.h"
 
 // Occurs on beginning of game as well as in the editor after compilation.
@@ -13,6 +15,11 @@ UPuzzlePlatformsGameInstance::UPuzzlePlatformsGameInstance(const FObjectInitiali
     if (MenuBPClass.Class != nullptr)
     {
         MenuClass = MenuBPClass.Class;
+    }
+    ConstructorHelpers::FClassFinder<UInGameMenu> InGameMenuBPClass(TEXT("/Game/UI/WBP_InGameMenu"));
+    if (InGameMenuBPClass.Class != nullptr)
+    {
+        InGameMenuClass = InGameMenuBPClass.Class;
     }
 }
 
@@ -31,6 +38,17 @@ void UPuzzlePlatformsGameInstance::LoadMenu()
 
     Menu->Setup();
     Menu->SetMenuInterface(this);
+}
+
+void UPuzzlePlatformsGameInstance::InGameLoadMenu()
+{
+    if (InGameMenuClass == nullptr) return;
+
+    UMenuWidget* InGameMenu = CreateWidget<UMenuWidget>(this, InGameMenuClass);
+    if (InGameMenu == nullptr) return;
+
+    InGameMenu->Setup();
+    InGameMenu->SetMenuInterface(this);
 }
 
 void UPuzzlePlatformsGameInstance::Host()
