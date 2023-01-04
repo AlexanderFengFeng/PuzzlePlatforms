@@ -3,10 +3,14 @@
 
 #include "PuzzlePlatformsGameInstance.h"
 #include "Engine/Engine.h"
+#include "Interfaces/OnlineSessionInterface.h"
+#include "UObject/ConstructorHelpers.h"
+#include "OnlineSubsystem.h"
+#include "OnlineSessionSettings.h"
+
 #include "UI/MainMenu.h"
 #include "UI/InGameMenu.h"
 #include "UI/MenuWidget.h"
-#include "UObject/ConstructorHelpers.h"
 
 // Occurs on beginning of game as well as in the editor after compilation.
 UPuzzlePlatformsGameInstance::UPuzzlePlatformsGameInstance(const FObjectInitializer& ObjectInitializer)
@@ -27,6 +31,24 @@ UPuzzlePlatformsGameInstance::UPuzzlePlatformsGameInstance(const FObjectInitiali
 void UPuzzlePlatformsGameInstance::Init()
 {
     Super::Init();
+    if (IOnlineSubsystem* OnlineSubsystem = IOnlineSubsystem::Get())
+    {
+        SessionInterface = OnlineSubsystem->GetSessionInterface();
+        if (SessionInterface.IsValid())
+        {
+            SessionInterface->OnCreateSessionCompleteDelegates.AddUObject(this, &UPuzzlePlatformsGameInstance::OnCreateSessionComplete);
+            SessionInterface->OnDestroySessionCompleteDelegates.AddUObject(this, &UPuzzlePlatformsGameInstance::OnDestroySessionComplete);
+            SessionInterface->OnFindSessionsCompleteDelegates.AddUObject(this, &UPuzzlePlatformsGameInstance::OnFindSessionsComplete);
+
+            SessionSearch = MakeShareable(new FOnlineSessionSearch());
+            if (SessionSearch.IsValid())
+            {
+                SessionSearch->bIsLanQuery = true;
+                UE_LOG(LogTemp, Warning, TEXT("Finding sessions..."));
+                SessionInterface->FindSessions(0, SessionSearch.ToSharedRef());
+            }
+        }
+    }
 }
 
 void UPuzzlePlatformsGameInstance::LoadMainMenu()
@@ -60,8 +82,27 @@ void UPuzzlePlatformsGameInstance::LoadMainMenuLevel()
     }
 }
 
-void UPuzzlePlatformsGameInstance::Host()
+void UPuzzlePlatformsGameInstance::CreateSession()
 {
+    if (SessionInterface.IsValid())
+    {
+        FOnlineSessionSettings SessionSettings;
+        SessionSettings.bIsLANMatch = true;
+        SessionSettings.NumPublicConnections = 2;
+        SessionSettings.bShouldAdvertise = true;
+        SessionInterface->CreateSession(0, SessionName, SessionSettings);
+    }
+}
+
+/* Delegate called when session creation is complete. */
+void UPuzzlePlatformsGameInstance::OnCreateSessionComplete(FName Session, bool Success)
+{
+    if (!Success)
+    {
+        UE_LOG(LogTemp, Warning, TEXT("Could not create session, %s"), *Session.ToString())
+        return;
+    }
+
     UEngine* Engine = GetEngine();
     if (Engine == nullptr) return;
 
@@ -73,6 +114,51 @@ void UPuzzlePlatformsGameInstance::Host()
     World->ServerTravel("/Game/ThirdPerson/Maps/ThirdPersonMap?listen");
 }
 
+/* Delegate called when session destruction is complete. */
+void UPuzzlePlatformsGameInstance::OnDestroySessionComplete(FName Session, bool Success)
+{
+    if (!Success)
+    {
+        UE_LOG(LogTemp, Warning, TEXT("Could not destroy session, %s"), *Session.ToString())
+        return;
+    }
+    // Creates a new session once a preexisting one has been cleaned up.
+    CreateSession();
+}
+
+/* Delegate called when finding one or more sessions is complete. */
+void UPuzzlePlatformsGameInstance::OnFindSessionsComplete(bool Success)
+{
+    if (!Success && SessionSearch.IsValid())
+    {
+        UE_LOG(LogTemp, Warning, TEXT("Could not find sessions"));
+        return;
+    }
+    for (auto& Result : SessionSearch->SearchResults)
+    {
+        UE_LOG(LogTemp, Warning, TEXT("Found session: %s"), *Result.GetSessionIdStr())
+    }
+    UE_LOG(LogTemp, Warning, TEXT("Finished finding sessions"));
+}
+
+/* Public function to host a session. */
+void UPuzzlePlatformsGameInstance::Host()
+{
+    if (SessionInterface.IsValid())
+    {
+        auto ExistingSession = SessionInterface->GetNamedSession(SessionName);
+        if (ExistingSession == nullptr)
+        {
+            CreateSession();
+        }
+        else
+        {
+            SessionInterface->DestroySession(SessionName);
+        }
+    }
+}
+
+/* Public function to join a session. */
 void UPuzzlePlatformsGameInstance::Join(const FString& Address)
 {
     UEngine* Engine = GetEngine();
