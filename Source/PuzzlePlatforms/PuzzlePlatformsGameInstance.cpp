@@ -8,8 +8,8 @@
 #include "OnlineSubsystem.h"
 #include "OnlineSessionSettings.h"
 
-#include "UI/MainMenu.h"
 #include "UI/InGameMenu.h"
+#include "UI/MainMenu.h"
 #include "UI/MenuWidget.h"
 
 // Occurs on beginning of game as well as in the editor after compilation.
