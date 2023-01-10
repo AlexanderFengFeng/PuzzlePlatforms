@@ -30,12 +30,16 @@ public:
 	virtual void Host() override;
 	UFUNCTION(Exec)
 	virtual void Join(const FString& Address) override;
+	UFUNCTION(Exec)
+	virtual void RefreshServerList() override;
 
 private:
 	virtual void Init() override;
 
 	TSubclassOf<UUserWidget> MainMenuClass;
 	TSubclassOf<UUserWidget> InGameMenuClass;
+
+	class UMainMenu* MainMenu;
 
 	const inline static FName SessionName = TEXT("Game Session");
 
