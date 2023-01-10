@@ -37,6 +37,10 @@ bool UMainMenu::Initialize()
     QuitGameButton->OnClicked.AddDynamic(this, &UMainMenu::QuitGame);
     BackToMainMenuButton->OnClicked.AddDynamic(this, &UMainMenu::ReturnToMenu);
     JoinServerButton->OnClicked.AddDynamic(this, &UMainMenu::JoinServer);
+    if (LoadingServerList != nullptr)
+    {
+        LoadingServerList->SetText(FText::FromString(TEXT("LOADING SERVER LIST...")));
+    }
     return true;
 }
 
@@ -63,6 +67,17 @@ void UMainMenu::SetServerList(TArray<FString> ServerNames)
         {
             Row->ServerName->SetText(FText::FromString(ServerName));
             ServerList->AddChild(Row);
+        }
+    }
+    if (LoadingServerList != nullptr)
+    {
+        if (ServerNames.IsEmpty())
+        {
+            LoadingServerList->SetText(FText::FromString(TEXT("NO SERVERS FOUND")));
+        }
+        else
+        {
+            LoadingServerList->SetText(FText::FromString(TEXT("SERVERS FOUND:")));
         }
     }
 }

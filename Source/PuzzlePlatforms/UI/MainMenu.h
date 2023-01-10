@@ -8,6 +8,7 @@
 #include "MainMenu.generated.h"
 
 class UButton;
+class UTextBlock;
 class UWidget;
 
 /**
@@ -38,6 +39,8 @@ private:
     UButton* BackToMainMenuButton;
     UPROPERTY(meta = (BindWidget))
     UButton* JoinServerButton;
+    UPROPERTY(meta = (BindWidget))
+    UTextBlock* LoadingServerList;
 
     UPROPERTY(meta = (BindWidget))
     class UWidgetSwitcher* MenuSwitcher;
