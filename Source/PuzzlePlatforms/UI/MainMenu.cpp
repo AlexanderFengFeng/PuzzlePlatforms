@@ -61,11 +61,7 @@ void UMainMenu::ReturnToMenu()
 void UMainMenu::JoinServer()
 {
     if (MenuInterface == nullptr) return;
-    if (UServerRow* Row = CreateWidget<UServerRow>(World, ServerRowClass))
-    {
-        ServerList->AddChild(Row);
-    }
-
     //FString IPAddress = IpAddressInput->GetText().ToString();
     //MenuInterface->Join(IPAddress);
+    MenuInterface->Join("");
 }

@@ -161,13 +161,13 @@ void UPuzzlePlatformsGameInstance::Host()
 /* Public function to join a session. */
 void UPuzzlePlatformsGameInstance::Join(const FString& Address)
 {
-    UEngine* Engine = GetEngine();
-    if (Engine == nullptr) return;
+    //UEngine* Engine = GetEngine();
+    //if (Engine == nullptr) return;
 
-    Engine->AddOnScreenDebugMessage(0, 5.f, FColor::Green, FString::Printf(TEXT("Joining: %s"), *Address));
+    //Engine->AddOnScreenDebugMessage(0, 5.f, FColor::Green, FString::Printf(TEXT("Joining: %s"), *Address));
 
-    APlayerController* PlayerController = GetFirstLocalPlayerController();
-    if (PlayerController == nullptr) return;
+    //APlayerController* PlayerController = GetFirstLocalPlayerController();
+    //if (PlayerController == nullptr) return;
 
-    PlayerController->ClientTravel(Address, ETravelType::TRAVEL_Absolute);
+    //PlayerController->ClientTravel(Address, ETravelType::TRAVEL_Absolute);
 }
