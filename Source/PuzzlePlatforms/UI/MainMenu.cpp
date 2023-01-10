@@ -3,6 +3,7 @@
 
 #include "MainMenu.h"
 #include "Components/Button.h"
+#include "Components/TextBlock.h"
 #include "Components/WidgetSwitcher.h"
 #include "UObject/ConstructorHelpers.h"
 
@@ -50,6 +51,25 @@ void UMainMenu::OpenJoinMenu()
 {
     if (MenuSwitcher == nullptr || JoinMenu == nullptr) return;
     MenuSwitcher->SetActiveWidget(JoinMenu);
+}
+
+void UMainMenu::SetServerList(TArray<FString> ServerNames)
+{
+    if (World == nullptr) return;
+
+    for (const FString& ServerName : ServerNames)
+    {
+        if (UServerRow* Row = CreateWidget<UServerRow>(World, ServerRowClass))
+        {
+            Row->ServerName->SetText(FText::FromString(ServerName));
+            ServerList->AddChild(Row);
+        }
+    }
+}
+
+void UMainMenu::ClearServerList()
+{
+    ServerList->ClearChildren();
 }
 
 void UMainMenu::ReturnToMenu()
