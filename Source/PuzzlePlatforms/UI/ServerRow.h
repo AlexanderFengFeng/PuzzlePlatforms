@@ -6,6 +6,9 @@
 #include "Blueprint/UserWidget.h"
 #include "ServerRow.generated.h"
 
+class UMainMenu;
+class UButton;
+
 /**
  * 
  */
@@ -14,8 +17,18 @@ class PUZZLEPLATFORMS_API UServerRow : public UUserWidget
 {
 	GENERATED_BODY()
 
+	UPROPERTY(meta = (BindWidget))
+	UButton* RowButton;
+
 public:
 	UPROPERTY(meta = (BindWidget))
 	class UTextBlock* ServerName;
 
+	void SetUp(UMainMenu* Parent, uint32 Index);
+
+	UMainMenu* Parent;
+	uint32 Index;
+
+	UFUNCTION()
+	void OnRowButtonClicked();
 };
