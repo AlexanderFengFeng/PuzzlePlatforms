@@ -24,6 +24,7 @@ public:
 
     void SetServerList(TArray<FString> ServerNames);
     void ClearServerList();
+    void SelectIndex(uint32 Index);
 
 protected:
     virtual bool Initialize() override;
@@ -54,7 +55,6 @@ private:
     UPanelWidget* ServerList;
     TSubclassOf<UUserWidget> ServerRowClass;
 
-
     UFUNCTION()
     void HostServer();
     UFUNCTION()
@@ -63,4 +63,6 @@ private:
     void ReturnToMenu();
     UFUNCTION()
     void JoinServer();
+
+    TOptional<uint32> SelectedIndex;
 };

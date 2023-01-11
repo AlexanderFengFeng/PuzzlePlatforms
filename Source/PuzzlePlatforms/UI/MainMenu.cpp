@@ -5,9 +5,8 @@
 #include "Components/Button.h"
 #include "Components/TextBlock.h"
 #include "Components/WidgetSwitcher.h"
-#include "UObject/ConstructorHelpers.h"
-
 #include "ServerRow.h"
+#include "UObject/ConstructorHelpers.h"
 
 UMainMenu::UMainMenu(const FObjectInitializer& ObjectInitializer)
 {
@@ -55,17 +54,22 @@ void UMainMenu::OpenJoinMenu()
 {
     if (MenuSwitcher == nullptr || JoinMenu == nullptr) return;
     MenuSwitcher->SetActiveWidget(JoinMenu);
+    // DEBUG
+    TArray<FString> ServerNames({ "Test1", "Test2" });
+    SetServerList(ServerNames);
 }
 
 void UMainMenu::SetServerList(TArray<FString> ServerNames)
 {
     if (World == nullptr) return;
 
+    uint32 i = 0;
     for (const FString& ServerName : ServerNames)
     {
         if (UServerRow* Row = CreateWidget<UServerRow>(World, ServerRowClass))
         {
             Row->ServerName->SetText(FText::FromString(ServerName));
+            Row->SetUp(this, i++);
             ServerList->AddChild(Row);
         }
     }
@@ -87,6 +91,11 @@ void UMainMenu::ClearServerList()
     ServerList->ClearChildren();
 }
 
+void UMainMenu::SelectIndex(uint32 Index)
+{
+    SelectedIndex = Index;
+}
+
 void UMainMenu::ReturnToMenu()
 {
     if (MenuSwitcher == nullptr || MainMenu == nullptr) return;
@@ -96,6 +105,14 @@ void UMainMenu::ReturnToMenu()
 void UMainMenu::JoinServer()
 {
     if (MenuInterface == nullptr) return;
+    if (SelectedIndex.IsSet())
+    {
+        UE_LOG(LogTemp, Warning, TEXT("Selected index: %d"), SelectedIndex.GetValue());
+    }
+    else
+    {
+        UE_LOG(LogTemp, Warning, TEXT("Selected index not set"));
+    }
     //FString IPAddress = IpAddressInput->GetText().ToString();
     //MenuInterface->Join(IPAddress);
     MenuInterface->Join("");
