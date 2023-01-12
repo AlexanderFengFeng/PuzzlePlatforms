@@ -39,6 +39,7 @@ void UPuzzlePlatformsGameInstance::Init()
             SessionInterface->OnCreateSessionCompleteDelegates.AddUObject(this, &UPuzzlePlatformsGameInstance::OnCreateSessionComplete);
             SessionInterface->OnDestroySessionCompleteDelegates.AddUObject(this, &UPuzzlePlatformsGameInstance::OnDestroySessionComplete);
             SessionInterface->OnFindSessionsCompleteDelegates.AddUObject(this, &UPuzzlePlatformsGameInstance::OnFindSessionsComplete);
+            SessionInterface->OnJoinSessionCompleteDelegates.AddUObject(this, &UPuzzlePlatformsGameInstance::OnJoinSessionComplete);
             RefreshServerList();
         }
     }
@@ -190,17 +191,34 @@ void UPuzzlePlatformsGameInstance::Host()
 }
 
 /* Public function to join a session. */
-void UPuzzlePlatformsGameInstance::Join(const FString& Address)
+void UPuzzlePlatformsGameInstance::Join(uint32 Index)
 {
-    //UEngine* Engine = GetEngine();
-    //if (Engine == nullptr) return;
+    if (!SessionInterface.IsValid() || !SessionSearch.IsValid()) return;
 
-    //Engine->AddOnScreenDebugMessage(0, 5.f, FColor::Green, FString::Printf(TEXT("Joining: %s"), *Address));
+    SessionInterface->JoinSession(0, SessionName, SessionSearch->SearchResults[Index]);
+}
 
-    //APlayerController* PlayerController = GetFirstLocalPlayerController();
-    //if (PlayerController == nullptr) return;
+/* Uses ClientTravel on a joined session following acquisition of a joined session. */
+void UPuzzlePlatformsGameInstance::OnJoinSessionComplete(FName Session, EOnJoinSessionCompleteResult::Type Result)
+{
+    if (!SessionInterface.IsValid()) return;
 
-    //PlayerController->ClientTravel(Address, ETravelType::TRAVEL_Absolute);
+    UEngine* Engine = GetEngine();
+    if (Engine == nullptr) return;
+
+    FString Address;
+    if (!SessionInterface->GetResolvedConnectString(SessionName, Address))
+    {
+        UE_LOG(LogTemp, Warning, TEXT("Could not get connect string from %s"), *Session.ToString());
+    }
+
+    Engine->AddOnScreenDebugMessage(0, 5.f, FColor::Green, FString::Printf(TEXT("Joining: %s"), *Address));
+
+    APlayerController* PlayerController = GetFirstLocalPlayerController();
+    if (PlayerController == nullptr) return;
+
+    PlayerController->ClientTravel(Address, ETravelType::TRAVEL_Absolute);
+
 }
 
 void UPuzzlePlatformsGameInstance::RefreshServerList()

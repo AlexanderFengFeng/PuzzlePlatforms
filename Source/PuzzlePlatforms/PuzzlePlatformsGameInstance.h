@@ -29,7 +29,7 @@ public:
 	UFUNCTION(Exec)
 	virtual void Host() override;
 	UFUNCTION(Exec)
-	virtual void Join(const FString& Address) override;
+	virtual void Join(uint32 Index) override;
 	UFUNCTION(Exec)
 	virtual void RefreshServerList() override;
 
@@ -50,4 +50,5 @@ private:
 	void OnCreateSessionComplete(FName Session, bool Success);
 	void OnDestroySessionComplete(FName Session, bool Success);
 	void OnFindSessionsComplete(bool Success);
+	void OnJoinSessionComplete(FName Session, EOnJoinSessionCompleteResult::Type Result);
 };

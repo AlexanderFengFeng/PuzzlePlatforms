@@ -107,13 +107,10 @@ void UMainMenu::JoinServer()
     if (MenuInterface == nullptr) return;
     if (SelectedIndex.IsSet())
     {
-        UE_LOG(LogTemp, Warning, TEXT("Selected index: %d"), SelectedIndex.GetValue());
+        MenuInterface->Join(SelectedIndex.GetValue());
     }
     else
     {
         UE_LOG(LogTemp, Warning, TEXT("Selected index not set"));
     }
-    //FString IPAddress = IpAddressInput->GetText().ToString();
-    //MenuInterface->Join(IPAddress);
-    MenuInterface->Join("");
 }
