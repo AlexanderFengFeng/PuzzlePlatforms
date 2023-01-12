@@ -44,6 +44,7 @@ void UPuzzlePlatformsGameInstance::Init()
     }
 }
 
+/* Loads the MainMenu widget. */
 void UPuzzlePlatformsGameInstance::LoadMainMenu()
 {
     if (MainMenuClass == nullptr) return;
@@ -55,6 +56,7 @@ void UPuzzlePlatformsGameInstance::LoadMainMenu()
     MainMenu->SetMenuInterface(this);
 }
 
+/* Loads the InGameMenu widget. */
 void UPuzzlePlatformsGameInstance::InGameLoadMenu()
 {
     if (InGameMenuClass == nullptr) return;
@@ -66,6 +68,7 @@ void UPuzzlePlatformsGameInstance::InGameLoadMenu()
     InGameMenu->SetMenuInterface(this);
 }
 
+/* Uses ClientTravel to bring the player to the MainMenu level. */
 void UPuzzlePlatformsGameInstance::LoadMainMenuLevel()
 {
     APlayerController* PlayerController = GetFirstLocalPlayerController();
@@ -75,6 +78,14 @@ void UPuzzlePlatformsGameInstance::LoadMainMenuLevel()
     }
 }
 
+/**
+ * Creates a new session.
+ *
+ * Based on session settings and parameters, the session will:
+ * - Be LAN-only.
+ * - Have a maximum of 2 players.
+ * - Allowed to be advertised and searchable.
+ */
 void UPuzzlePlatformsGameInstance::CreateSession()
 {
     if (SessionInterface.IsValid())
@@ -87,7 +98,14 @@ void UPuzzlePlatformsGameInstance::CreateSession()
     }
 }
 
-/* Delegate called when session creation is complete. */
+/**
+ * Uses ServerTravel to join a newly created session.
+ *
+ * Intended to be used as a callback for OnCreateSessionCompleteDelegates.
+ *
+ * @param Session The name of the session that was attempted to be created.
+ * @param Success Whether creating the session succeeded.
+ */
 void UPuzzlePlatformsGameInstance::OnCreateSessionComplete(FName Session, bool Success)
 {
     if (!Success)
@@ -107,7 +125,14 @@ void UPuzzlePlatformsGameInstance::OnCreateSessionComplete(FName Session, bool S
     World->ServerTravel("/Game/ThirdPerson/Maps/ThirdPersonMap?listen");
 }
 
-/* Delegate called when session destruction is complete. */
+/**
+ * Creates a new session (after one was potentially cleaned up).
+ *
+ * Intended to be used as a callback for OnDestroySessionCompleteDelegates.
+ *
+ * @param Session The name of the session that was attempted to be destroyed.
+ * @param Success Whether destroying the session succeeded.
+ */
 void UPuzzlePlatformsGameInstance::OnDestroySessionComplete(FName Session, bool Success)
 {
     if (!Success)
@@ -119,7 +144,13 @@ void UPuzzlePlatformsGameInstance::OnDestroySessionComplete(FName Session, bool 
     CreateSession();
 }
 
-/* Delegate called when finding one or more sessions is complete. */
+/**
+ * Uses MainMenu to set a list of joinable servers.
+ *
+ * Intended to be used as a callback for OnFindSessionsCompleteDelegates.
+ *
+ * @param Success Whether the finding the sessions succeeded.
+ */
 void UPuzzlePlatformsGameInstance::OnFindSessionsComplete(bool Success)
 {
     if (!Success && SessionSearch.IsValid())
