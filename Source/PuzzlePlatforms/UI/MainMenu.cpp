@@ -54,9 +54,6 @@ void UMainMenu::OpenJoinMenu()
 {
     if (MenuSwitcher == nullptr || JoinMenu == nullptr) return;
     MenuSwitcher->SetActiveWidget(JoinMenu);
-    // DEBUG
-    TArray<FString> ServerNames({ "Test1", "Test2" });
-    SetServerList(ServerNames);
 }
 
 void UMainMenu::SetServerList(TArray<FString> ServerNames)
